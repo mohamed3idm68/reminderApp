@@ -1,7 +1,7 @@
 import { Component } from "react";
 import "./App.css";
 import { connect } from "react-redux";
-import { add_reminder } from "./actions/action";
+import { add_reminder  } from "./actions/action";
 
 class App extends Component {
   state = {
@@ -9,7 +9,29 @@ class App extends Component {
     date: new Date(),
   };
 
+
+     renderReminder = () => {
+       const {reminders} = this.props
+        
+       return (
+        <ul className="list-group">
+              {
+                reminders.map((reminder) => {
+                  return (
+                     <li className="list-group-item">
+                         <div>{reminder.text}</div>
+                         <div>{reminder.date}</div>
+                     </li>
+                  )
+                })
+              }
+        </ul>
+       )
+
+     }
+
   render() {
+    console.log(this.props)
     return (
       <>
         <div className="App">
@@ -30,15 +52,23 @@ class App extends Component {
           />
           <button
             className="btn btn-primary btn-block"
-            onClick={() => add_reminder(this.state.text, this.state.date)}
+            onClick={() => this.props.add_reminder(this.state.text, this.state.date)}
           >
             Add Reminder
           </button>
-          <button className="btn btn-danger btn-block ">Clear Reminder</button>
+          {this.renderReminder()}
+          <button className="btn btn-danger btn-block ">Clear Reminder</button>   
         </div>
       </>
     );
   }
 }
 
-export default connect(null, { add_reminder })(App);
+
+
+export default connect(state => {
+  console.log(state)
+  return {
+    reminders : state
+  }
+} , { add_reminder })(App);
