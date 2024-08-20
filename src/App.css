@@ -1,0 +1,89 @@
+.App {
+  background: #7e7ec9;
+  /* height: 371px; */
+  padding: 40px;
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.input2 {
+  display: block;
+  width: 427%;
+  margin-top: 10px;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--bs-body-color);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: var(--bs-body-bg);
+  background-clip: padding-box;
+  border: var(--bs-border-width) solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.list-group {
+  display: flex;
+}
+
+li.list-group-item {
+    margin:5px ;
+}
+
+
+.date {
+    color: blue;
+}
+
+
+button.btn.btn-primary.btn-block {
+  margin-bottom: 10px;
+}
+
+.remove.btn.btn-danger {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(300px, -50%);
+}
+
+.text {
+  line-height: 1.5;
+  width: fit-content;
+}
+
+
+
+@media (max-width: 776px) {
+  input.input2 {
+    width: 160%;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+  }
+
+  .remove.btn.btn-danger {
+    position: absolute;
+    top: 30px;
+    left: -30px;
+    border-radius: 50%;
+  }
+}
+
+

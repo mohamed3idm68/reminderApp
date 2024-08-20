@@ -7,13 +7,13 @@ import "./index.css";
 }
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Provider } from "react-redux";
-import reminder from "./reducers/reducer.js";
+import Reminder from "./reducers/reducer.js";
 import { createStore } from "redux";
 
 
 
 
-const store = createStore(reminder)
+const store = createStore(Reminder)
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
