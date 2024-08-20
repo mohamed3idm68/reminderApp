@@ -2,6 +2,7 @@ import { Component } from "react";
 import "./App.css";
 import { connect } from "react-redux";
 
+
 import {
   add_reminder,
   clear_reminder,
@@ -20,6 +21,8 @@ class App extends Component {
     date: new Date(),
   };
 
+
+  
 
   rendeRreminder = () => {
     const { reminders } = this.props;
@@ -71,7 +74,7 @@ class App extends Component {
           /> */}
           <DatePicker
            className="input2"
-            placeholderText="selet your time"
+            placeholderText="selet time"
             value={this.state.date}
             selected={this.state.date}
             onChange={(date) => this.setState({ date: date })}
