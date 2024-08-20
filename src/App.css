@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .App {
   background: #7e7ec9;
   /* height: 371px; */
@@ -87,3 +88,10 @@ button.btn.btn-primary.btn-block {
 }
 
 
+=======
+.btn-block {
+    display: block;
+    width:100%;
+    margin-top:10px;
+}
+>>>>>>> 119260feb30bc247a35ae37e88f502a5e8d850d8
