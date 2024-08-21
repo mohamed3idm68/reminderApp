@@ -73,8 +73,8 @@ class App extends Component {
             value={this.state.date}
           /> */}
           <DatePicker
-           className="input2"
-            placeholderText="selet time"
+           className="form-control"
+            placeholderText="select time"
             value={this.state.date}
             selected={this.state.date}
             onChange={(date) => this.setState({ date: date })}
