@@ -2,7 +2,6 @@ import { Component } from "react";
 import "./App.css";
 import { connect } from "react-redux";
 
-
 import {
   add_reminder,
   clear_reminder,
@@ -11,18 +10,63 @@ import {
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
-
-
+// import ClosedDatePicker from "./closeDays/CloseDate";
 
 class App extends Component {
   state = {
-    text: "",
-    date: new Date(),
+    formData: {
+      text: "",
+      date: new Date(),
+    },
+    errors: {
+      text: "",
+      date: "",
+    },
+    
   };
 
-
+     mainDate = new Date("2024-8-28");
+     maxDate = new Date("2024-9-28");
   
+  validatForm = () => {
+    const { formData } = this.state;
+    let errors = {};
+    let isValid = true;
+
+    if (!formData.text.trim()) {
+      errors.text = "text is required";
+
+      isValid = false;
+    }
+
+    if (!formData.date.trim()) {
+      errors.date = "date is requiresd";
+      isValid = "false";
+    }
+
+    this.setState(errors);
+    return isValid;
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (this.validatForm()) {
+      console.log("form submitted", this.state.formData);
+    } else {
+      console.log("form has errors");
+    }
+  };
+
+  handleChange = (e) => {
+    const data = (e.target.name = e.target.value);
+    this.setState({
+      formData: {
+        ...this.state.formData,
+        data,
+      },
+    });
+  };
 
   rendeRreminder = () => {
     const { reminders } = this.props;
@@ -34,7 +78,9 @@ class App extends Component {
             <>
               <li key={reminder.id} className="list-group-item">
                 <div className="text">{reminder.text}</div>
-                <div className="date">{moment(new Date(reminder.date)).fromNow()}</div>
+                <div className="date">
+                  {moment(new Date(reminder.date)).fromNow()}
+                </div>
                 <div
                   className="remove btn btn-danger"
                   onClick={() => this.props.remove_reminder(reminder.id)}
@@ -50,67 +96,64 @@ class App extends Component {
   };
 
   render() {
-    console.log(this.props)
-    return ( 
+    console.log(this.props);
+    const { formData, errors } = this.state;
+    return (
       <>
-      
-      <div className="App">
+        <div className="App">
           <div className="reminder-title">
             <h1>What Should you DO ?</h1>
           </div>
-          <input
-            type="text"
-            placeholder="enter what do you think"
-            max-length="20"
-            className="form-control"
-            onChange={(e) => this.setState({ text: e.target.value })}
-            value={this.state.text}
-          />
-          {/* <input
-            type="datetime-local"
-            className="form-control"
-            onChange={(e) => this.setState({ date: e.target.value })}
-            value={this.state.date}
-          /> */}
-          <DatePicker
-           className="input2"
-            placeholderText="selet time"
-            value={this.state.date}
-            selected={this.state.date}
-            onChange={(date) => this.setState({ date: date })}
-            showTimeSelect
-            timeFormat="HH:mm"
-            dateFormat="MMMM d, yyy h:mm aa"
-            timeCaption="time"
-          />
-          <button
-            className="btn btn-primary btn-block"
+          <form onSubmit={this.handleSubmit}>
+            <input
+              type="text"
+              placeholder="enter what do you think"
+              max-length="20"
+              className="form-control"
+              onChange={this.handleChange}
+              // value/={formData.text}
+              required
+            />
+            {errors.text && <span style={{ color: "red" }}>{errors.text}</span>}
+            <div className="DatePicker">
+              <DatePicker
+                selected={new Date()}
+                onChange={this.handleChange}
+                // filterDate={this.isDayDisabled}
+                placeholderText="Select a date"
+                showTimeSelect
+                mainDate={this.mainDate}
+                maxDate={this.maxDate}
+              />
 
-            onClick={() => {
-              this.props.add_reminder(this.state.text, this.state.date);
-              this.setState({ text: "", date: "" });
-            }}
-          >
-            Add Reminder
-          </button>
-          {this.rendeRreminder()}
-          <button
-            className="btn btn-danger btn-block "
-            onClick={() => this.props.clear_reminder()}
-          >
-            Clear Reminder
-          </button> 
-       </div>
-   </>
-
-    )
-     
-  }}
-    
-      
-     
-
-
+              {errors.date && (
+                <span style={{ color: "red" }}>{errors.date}</span>
+              )}
+            </div>
+            <button
+              className="btn btn-primary btn-block"
+              type="submit"
+              onClick={(e) => {
+                e.preventDefault();
+                this.props.add_reminder(this.state.text, this.state.date);
+                this.setState({ text: "", date: "" });
+              }}
+            >
+              Add Reminder
+            </button>
+            {this.rendeRreminder()}
+            <button
+              className="btn btn-danger btn-block "
+              onClick={() => this.props.clear_reminder()}
+            >
+              Clear Reminder
+            </button>
+          </form>
+        </div>
+      </>
+    );
+  }
+}
 
 export default connect(
   (state) => {
@@ -120,6 +163,3 @@ export default connect(
   },
   { add_reminder, remove_reminder, clear_reminder }
 )(App);
-
-
-
