@@ -104,56 +104,53 @@ class App extends Component {
           <div className="reminder-title">
             <h1>What Should you DO ?</h1>
           </div>
-          <form onSubmit={this.handleSubmit}>
-            <input
-              type="text"
-              placeholder="enter what do you think"
-              max-length="20"
-              className="form-control"
-              onChange={this.handleChange}
-              // value/={formData.text}
-              required
-            />
-            {errors.text && <span style={{ color: "red" }}>{errors.text}</span>}
-            <div className="DatePicker">
-              <DatePicker
-                selected={new Date()}
-                onChange={this.handleChange}
-                // filterDate={this.isDayDisabled}
-                placeholderText="Select a date"
-                showTimeSelect
-                mainDate={this.mainDate}
-                maxDate={this.maxDate}
-              />
+          <input
+            type="text"
+            placeholder="enter what do you think"
+            max-length="20"
+            className="form-control"
+            onChange={(e) => this.setState({ text: e.target.value })}
+            value={this.state.text}
+          />
+          <DatePicker
+           className="form-control"
+            placeholderText="selet time"
+            value={this.state.date}
+            selected={this.state.date}
+            onChange={(date) => this.setState({ date: date })}
+            showTimeSelect
+            timeFormat="HH:mm"
+            dateFormat="MMMM d, yyy h:mm aa"
+            timeCaption="time"
+          />
+          <button
+            className="btn btn-primary btn-block"
 
-              {errors.date && (
-                <span style={{ color: "red" }}>{errors.date}</span>
-              )}
-            </div>
-            <button
-              className="btn btn-primary btn-block"
-              type="submit"
-              onClick={(e) => {
-                e.preventDefault();
-                this.props.add_reminder(this.state.text, this.state.date);
-                this.setState({ text: "", date: "" });
-              }}
-            >
-              Add Reminder
-            </button>
-            {this.rendeRreminder()}
-            <button
-              className="btn btn-danger btn-block "
-              onClick={() => this.props.clear_reminder()}
-            >
-              Clear Reminder
-            </button>
-          </form>
-        </div>
-      </>
-    );
-  }
-}
+            onClick={() => {
+              this.props.add_reminder(this.state.text, this.state.date);
+              this.setState({ text: "", date: "" });
+            }}
+          >
+            Add Reminder
+          </button>
+          {this.rendeRreminder()}
+          <button
+            className="btn btn-danger btn-block "
+            onClick={() => this.props.clear_reminder()}
+          >
+            Clear Reminder
+          </button> 
+       </div>
+   </>
+
+    )
+     
+  }}
+    
+      
+     
+
+
 
 export default connect(
   (state) => {
