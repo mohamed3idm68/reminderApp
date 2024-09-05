@@ -7,9 +7,15 @@ html {
 
 .App {
   background: #7e7ec9;
-  /* height: 371px; */
   padding: 70px;
+  
 }
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
 
 h1 {
   text-align: center;
@@ -29,24 +35,10 @@ h1 {
  
 }
 
-.input2 {
-  display: block;
-  width: 689%;
-  margin-top: 10px;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: var(--bs-body-color);
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-color: var(--bs-body-bg);
-  background-clip: padding-box;
-  border: var(--bs-border-width) solid var(--bs-border-color);
-  border-radius: var(--bs-border-radius);
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
+
+
+
+
 
 .list-group {
   display: flex;
