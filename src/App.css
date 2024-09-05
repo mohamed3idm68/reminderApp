@@ -7,8 +7,13 @@ html {
 
 .App {
   background: #7e7ec9;
+<<<<<<< HEAD
   padding: 70px;
   
+=======
+  /* height: 371px; */
+  padding: 40px;
+>>>>>>> 85cedfc297ad88a461f748d4beee4987498877b8
 }
 
 form {
@@ -35,9 +40,16 @@ h1 {
  
 }
 
+<<<<<<< HEAD
 
 
 
+
+=======
+div {
+  width:100%
+}
+>>>>>>> 85cedfc297ad88a461f748d4beee4987498877b8
 
 
 .list-group {
@@ -62,8 +74,7 @@ button.btn.btn-primary.btn-block {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(580px, -50%);
-  border-radius: 50%;
+  transform: translate(300px, -50%);
 }
 
 .text {
