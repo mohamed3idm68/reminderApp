@@ -1,19 +1,22 @@
-
 html {
   background: #7e7ec9;
 }
-
-
 
 .App {
   background: #7e7ec9;
   /* height: 371px; */
   padding: 40px;
+  
 }
 
 h1 {
   text-align: center;
-  
+}
+
+
+form {
+  display: flex;
+  flex-direction: column;
 }
 
 .btn-block {
@@ -26,27 +29,19 @@ h1 {
   display: block;
   width: 100%;
   margin-top: 30px;
- 
 }
-
-div {
-  width:100%
-}
-
 
 .list-group {
   display: flex;
 }
 
 li.list-group-item {
-    margin:5px ;
+  margin: 5px;
 }
-
 
 .date {
-    color: blue;
+  color: blue;
 }
-
 
 button.btn.btn-primary.btn-block {
   margin-bottom: 10px;
@@ -64,8 +59,6 @@ button.btn.btn-primary.btn-block {
   width: fit-content;
 }
 
-
-
 @media (max-width: 992px) {
   input.input2 {
     width: 135%;
@@ -80,16 +73,15 @@ button.btn.btn-primary.btn-block {
   .remove.btn.btn-danger {
     position: absolute;
     top: 30px;
-    left: -21pc;
+    left: 20px;
     border-radius: 50%;
   }
 }
 
-
-
 .btn-block {
-    display: block;
-    width:100%;
-    margin-top:10px;
+  display: block;
+  width: 100%;
+  margin-top: 10px;
 }
+
 

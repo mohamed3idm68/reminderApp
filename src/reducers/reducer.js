@@ -15,7 +15,7 @@ const Reminder = (state = [] , action) => {
            reminders= state.filter((reminder) => reminder.id !== action.id)
            bake_cookie('reminders' , reminders)
            return reminders;
-    } else if (action.type=== CLEAR_REMINDER) {
+    } else if (action.type === CLEAR_REMINDER) {
         reminders = []
         bake_cookie('reminders' , reminders)
         return reminders

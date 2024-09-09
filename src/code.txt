@@ -1,0 +1,181 @@
+import { useRef, useState } from "react";
+import "./App.css";
+import { connect } from "react-redux";
+
+import {
+  add_reminder,
+  clear_reminder,
+  remove_reminder,
+} from "./actions/action";
+import moment from "moment";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+// import ClosedDatePicker from "./closeDays/CloseDate";
+
+function App (props) {
+  
+
+  // const [values , setValues] = useState({
+  //   text:"",
+  //   date: new Date()
+  // })
+
+  const [errors , setErrors] = useState({
+    taxt:"",
+    date: new Date()
+  })
+
+  const fieldText = useRef();
+  const fielddate = useRef();
+
+  const mainDate = new Date();
+
+  const validatForm = () => {
+
+    const fieldValue = fieldText.current.value;
+    const dateValue = fielddate.current.value;
+
+    let newerrors = [];
+    let isValid = true;
+
+    if (fieldValue.trim() === "") {
+      setErrors(newerrors.push("name is required"))
+
+      isValid = false;
+    }
+
+    if (dateValue.trim() === "") {
+      setErrors(newerrors.push("date is required"))
+
+      isValid = false;
+    }
+
+    return isValid;
+  };
+
+
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    validatForm()
+
+
+  }
+
+  // const handleChange = (e) => {
+  //   const newObj = {...values , [e.target.name]: e.target.value}
+  //   setValues(newObj)
+  //   console.log(newObj)
+  // };
+
+  const rendeRreminder = () => {
+    const { reminders } = props;
+
+    return (
+      <ul className="list-group">
+        {reminders.map((reminder) => {
+          return (
+            <>
+              <li key={reminder.id} className="list-group-item">
+                <div className="text">{reminder.text}</div>
+                <div className="date">
+                  {moment(new Date(reminder.date)).fromNow()}
+                </div>
+                <div
+                  className="remove btn btn-danger"
+                  onClick={() => props.remove_reminder(reminder.id)}
+                >
+                  X
+                </div>
+              </li>
+            </>
+          );
+        })}
+      </ul>
+    );
+  };
+    
+    return (
+      <>
+      {errors.map((error) => {
+          <div className="alert alert-danger">
+             <strong>error</strong>
+             <ul>
+              <li>{error}</li>
+             </ul>
+          </div>
+      })}
+        <div className="App">
+          <div className="reminder-title">
+            <h1>What Should you DO ?</h1>
+          </div>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              name="text"
+              placeholder="enter what do you think"
+              max-length="20"
+              className="form-control"
+              // onChange={handleChange}
+              ref={(fieldValue)}
+              value={values.text}
+            />
+            {errors.text && (
+              <span style={{ color: "red" }}>{errors.text}</span>
+            )}
+            <DatePicker
+              className="form-control"
+              placeholderText="selet time"
+              value={values.date}
+              name="date"
+              selected={values.date}
+              // onChange={handleChange}
+              ref={(dateValue)}
+              showTimeSelect
+              timeFormat="HH:mm"
+              dateFormat="MMMM d, yyy h:mm aa"
+              timeCaption="time"
+              minDate={mainDate}
+              
+              
+            />
+            {errors.date && (
+              <span style={{ color: "red" }}>{errors.date}</span>
+            )}
+
+            <button
+              className="btn btn-primary btn-block"
+              type="submit"
+              onClick={(e) => {
+                e.preventDefault;
+                props.add_reminder(values.text, values.date);
+                setValues({ text: "", date: "" });
+              }}
+            >
+              Add Reminder
+            </button>
+            {rendeRreminder()}
+            <button
+              className="btn btn-danger btn-block "
+              onClick={() => props.clear_reminder()}
+            >
+              Clear Reminder
+            </button>
+          </form>
+        </div>
+      </>
+    );
+  }
+
+
+
+export default connect(
+  (state) => {
+    return {
+      reminders: state,
+    };
+  },
+  { add_reminder, remove_reminder, clear_reminder }
+)(App);
