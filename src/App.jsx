@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { useRef, useState, useEffect } from "react";
-=======
-import { Component, useRef } from "react";
->>>>>>> 9909301408a257b75c69f5012da1a31c4798e2a4
 import "./App.css";
 import { connect } from "react-redux";
 import {
@@ -13,7 +9,6 @@ import {
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-<<<<<<< HEAD
 import sounds from "../public/sounds/alarmSound.mp3";
 
 function App(props) {
@@ -71,23 +66,6 @@ function App(props) {
       [e.target.name]: e.target.value,
     });
   };
-=======
-import alarmSound from "./alarmSound/alarmSound.mp3"
-
-class App extends Component {
-  state = {
-    text: "",
-    date: new Date(),
-    remindernotify: '',
-    timeOutId: null,
-  };
-
-
-
-
-
-  minDate = new Date()
->>>>>>> 9909301408a257b75c69f5012da1a31c4798e2a4
 
   const handleSetReminder = () => {
     const now = new Date();
@@ -165,7 +143,6 @@ class App extends Component {
     );
   };
 
-<<<<<<< HEAD
   return (
     <div className="App">
       {renderErrors()}
@@ -195,7 +172,7 @@ class App extends Component {
           timeCaption="Time"
           minDate={mainDate}
         />
-        {message && <div className="alert alert-info">{message}</div>}
+        {message && <div className="alert alert-info mt-3">{message}</div>}
         <button
           className="btn btn-primary btn-block"
           type="submit"
@@ -212,75 +189,6 @@ class App extends Component {
       </form>
     </div>
   );
-=======
-  render() {
-    console.log(this.props);
-
-
-    
-
-    return (
-      <>
-        <div className="App">
-          <div className="reminder-title">
-            <h1>What Should you DO ?</h1>
-          </div>
-          <form>
-            <input
-              type="text"
-              placeholder="enter what do you think"
-              max-length="20"
-              className="form-control"
-              onChange={(e) => this.setState({ text: e.target.value })}
-              value={this.state.text}
-              required
-            />
-            {/* <input
-            type="datetime-local"
-            className="form-control"
-            onChange={(e) => this.setState({ date: e.target.value })}
-            value={this.state.date}
-          /> */}
-            <DatePicker
-              className="form-control"
-              placeholderText="select time"
-              value={this.state.date}
-              selected={this.state.date}
-              onChange={(date) => this.setState({ date: date })}
-              showTimeSelect
-              timeFormat="HH:mm"
-              dateFormat="MMMM d, yyy h:mm aa"
-              timeCaption="time"
-              minDate={this.minDate}
-              required
-            />
-            <button
-              className="btn btn-primary btn-block"
-              type="submit"
-              onClick={() => {
-                if (this.state.text.trim() === "") {
-                  return "";
-                } else {
-                  this.props.add_reminder(this.state.text, this.state.date);
-                  this.setState({ text: "", date: "" });
-                }
-              }}
-            >
-              Add Reminder
-            </button>
-            {this.rendeRreminder()}
-            <button
-              className="btn btn-danger btn-block "
-              onClick={() => this.props.clear_reminder()}
-            >
-              Clear Reminder
-            </button>
-          </form>
-        </div>
-      </>
-    );
-  }
->>>>>>> 9909301408a257b75c69f5012da1a31c4798e2a4
 }
 
 export default connect(

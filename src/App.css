@@ -4,12 +4,8 @@ html {
 
 .App {
   background: #7e7ec9;
-<<<<<<< HEAD
   /* height: 371px; */
   padding: 40px;
-=======
-  padding: 70px;
->>>>>>> 9909301408a257b75c69f5012da1a31c4798e2a4
   
 }
 
@@ -41,21 +37,6 @@ form {
   margin-top: 30px;
 }
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-
-
-
-
-=======
-div {
-  width:100%
-}
->>>>>>> 85cedfc297ad88a461f748d4beee4987498877b8
-
-
->>>>>>> 9909301408a257b75c69f5012da1a31c4798e2a4
 .list-group {
   display: flex;
 }
