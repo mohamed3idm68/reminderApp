@@ -10,6 +10,7 @@ import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import sounds from "../public/sounds/alarmSound.mp3";
+import ReminderModal from "./components/ReminderModal";
 
 function App(props) {
   const [values, setValues] = useState({
@@ -18,12 +19,14 @@ function App(props) {
   });
 
   const [errors, setErrors] = useState({
-    text: 'name is requires',
-    date: 'date is not right',
+    text: "name is requires",
+   
   });
 
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [timeoutId, setTimeoutId] = useState(null);
+  const [reminderMessage, setReminderMessage] = useState("");
+  const [showWindow, setShowWindow] = useState(false);
 
   const mainDate = new Date();
 
@@ -67,6 +70,9 @@ function App(props) {
     });
   };
 
+ 
+
+
   const handleSetReminder = () => {
     const now = new Date();
     const reminderDate = new Date(values.date);
@@ -83,12 +89,14 @@ function App(props) {
       // Set a new timeout
       const id = setTimeout(() => {
         playSound();
-        setMessage('Reminder: Time to take action!');
+        setMessage("Reminder: Time to take action!");
+        setReminderMessage("it is time")
+        setShowWindow(true);
       }, timeout);
 
       setTimeoutId(id);
     } else {
-      setMessage('Please set a future time.');
+      setMessage("Please set a future time.");
     }
   };
 
@@ -106,6 +114,16 @@ function App(props) {
       }
     };
   }, [timeoutId]);
+
+  const handleSnooze = () => {
+    setShowWindow(false);
+    // Implement your snooze logic here (e.g., extend the reminder time)
+  };
+
+  const handleComplete = () => {
+    setShowWindow(false);
+    // Implement your complete logic here (e.g., mark the reminder as done)
+  };
 
   const renderErrors = () => {
     return Object.keys(errors).length > 0 ? (
@@ -146,6 +164,14 @@ function App(props) {
   return (
     <div className="App">
       {renderErrors()}
+      {showWindow && (
+        <ReminderModal
+          message={reminderMessage}
+          onSnooze={handleSnooze}
+          onComplete={handleComplete}
+          onClose={() => setShowWindow(false)}
+        />
+      )}
       <div className="reminder-title">
         <h1>What Should you DO?</h1>
       </div>
@@ -173,10 +199,7 @@ function App(props) {
           minDate={mainDate}
         />
         {message && <div className="alert alert-info mt-3">{message}</div>}
-        <button
-          className="btn btn-primary btn-block"
-          type="submit"
-        >
+        <button className="btn btn-primary btn-block" type="submit">
           Add Reminder
         </button>
         {renderReminder()}
