@@ -11,6 +11,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import sounds from "../public/sounds/alarmSound.mp3";
 
+
 function App(props) {
   const [values, setValues] = useState({
     text: "",
@@ -18,8 +19,8 @@ function App(props) {
   });
 
   const [errors, setErrors] = useState({
-    text: 'name is requires',
-    date: 'date is not right',
+    text: 'name is required',
+    // date: null,
   });
 
   const [message, setMessage] = useState('');
@@ -32,7 +33,7 @@ function App(props) {
     let newErrors = {};
     let isValid = true;
 
-    if (text === "") {
+    if (text.trim() === "") {
       newErrors.text = "Name is required";
       isValid = false;
     }
@@ -107,6 +108,8 @@ function App(props) {
     };
   }, [timeoutId]);
 
+ 
+
   const renderErrors = () => {
     return Object.keys(errors).length > 0 ? (
       <div className="alert alert-danger">
@@ -160,6 +163,7 @@ function App(props) {
           onChange={handleChange}
           required
         />
+        {errors.text && <p style={{color:"red"}}>{errors.text}</p>}
         <DatePicker
           className="form-control"
           placeholderText="Select time"
