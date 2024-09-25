@@ -1,4 +1,4 @@
-
+import "./App.css"
 
 
 const ReminderModal = ({ message, onSnooze, onComplete, onClose }) => {
@@ -7,8 +7,8 @@ const ReminderModal = ({ message, onSnooze, onComplete, onClose }) => {
         <div className="modal-content">
           <span className="close" onClick={onClose}>&times;</span>
           <h2>{message}</h2>
-          <button onClick={onSnooze}>Snooze</button>
-          <button onClick={onComplete}>Complete</button>
+          <button className="btn btn-primary" onClick={onSnooze}>Snooze</button>
+          <button className="btn btn-secondary" onClick={onComplete}>Complete</button>
         </div>
       </div>
     );

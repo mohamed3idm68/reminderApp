@@ -81,6 +81,9 @@ function App(props) {
       const timeout = reminderDate - now;
       setMessage(`Reminder set for ${reminderDate.toLocaleString()}`);
 
+      console.log("Setting reminder for:", reminderDate);
+
+
       // Clear any existing timeout
       if (timeoutId) {
         clearTimeout(timeoutId);
@@ -90,9 +93,13 @@ function App(props) {
       const id = setTimeout(() => {
         playSound();
         setMessage("Reminder: Time to take action!");
-        setReminderMessage("it is time")
+        setReminderMessage("It is time");
         setShowWindow(true);
+        console.log("showWindow after set:", showWindow); // This will log the previous state
       }, timeout);
+      
+    
+      
 
       setTimeoutId(id);
     } else {
@@ -165,11 +172,12 @@ function App(props) {
     <div className="App">
       {renderErrors()}
       {showWindow && (
-        <ReminderModal
+        <ReminderModal 
           message={reminderMessage}
           onSnooze={handleSnooze}
           onComplete={handleComplete}
-          onClose={() => setShowWindow(false)}
+          onClose={ () => setShowWindow(false)}
+        
         />
       )}
       <div className="reminder-title">

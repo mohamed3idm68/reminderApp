@@ -1,0 +1,28 @@
+
+
+.modal {
+    background: rgba(217, 212, 212, 0.8); /* Slight transparency */
+    position: fixed; /* Make it fixed to the viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; /* Cover the entire screen */
+    display: flex; /* Center the modal content */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it appears on top */
+  }
+  
+  
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+    background: #7e7ec9;
+    border-radius: 5px; /* Optional: Rounded corners */
+    padding: 20px; /* Add some padding */
+    width: 300px; /* Increase width if needed */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+  }
+  
+  
+   
