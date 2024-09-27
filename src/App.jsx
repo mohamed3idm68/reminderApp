@@ -21,8 +21,8 @@ function App(props) {
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
   const [timeoutId, setTimeoutId] = useState(null);
-  const [reminderMessage, setReminderMessage] = useState("");
   const [showWindow, setShowWindow] = useState(false);
+  const [timeOut, setTimeOut] = useState(false);
 
   const mainDate = new Date();
 
@@ -78,11 +78,7 @@ function App(props) {
       }
 
       const id = setTimeout(() => {
-        playSound();
-        setMessage("Reminder: Time to take action!");
-        // setReminderMessage("It is time");
-        setShowWindow(true);
-        console.log("right")
+        setTimeOut(true);
       }, timeout);
 
       setTimeoutId(id);
@@ -97,6 +93,15 @@ function App(props) {
   };
 
   useEffect(() => {
+    if (timeOut) {
+      playSound();
+      setMessage("Reminder: Time to take action!");
+      setShowWindow(true); // Show the modal when timeout occurs
+      console.log("occured")
+    }
+  }, [timeOut]);
+
+  useEffect(() => {
     return () => {
       if (timeoutId) {
         clearTimeout(timeoutId);
@@ -106,11 +111,13 @@ function App(props) {
 
   const handleSnooze = () => {
     setShowWindow(false);
+    setTimeOut(false);
     // Implement snooze logic here
   };
 
   const handleComplete = () => {
     setShowWindow(false);
+    setTimeOut(false);
     // Implement complete logic here
   };
 
@@ -154,8 +161,7 @@ function App(props) {
     <div className="App">
       {renderErrors()}
       {showWindow && (
-        <ReminderModal 
-          // message={reminderMessage}
+        <ReminderModal
           onSnooze={handleSnooze}
           onComplete={handleComplete}
           onClose={() => setShowWindow(false)}
@@ -175,7 +181,7 @@ function App(props) {
           onChange={handleChange}
           required
         />
-        {errors && <h6 style={{color:"red"}}>{errors.text}</h6>}
+        {errors && <h6 style={{ color: "red" }}>{errors.text}</h6>}
         <DatePicker
           className="form-control"
           placeholderText="Select time"
@@ -188,7 +194,6 @@ function App(props) {
           timeCaption="Time"
           minDate={mainDate}
         />
-        {/* {message && <div className="alert alert-info mt-3">{message}</div>} */}
         <button className="btn btn-primary btn-block" type="submit">
           Add Reminder
         </button>
@@ -210,3 +215,7 @@ export default connect(
   }),
   { add_reminder, remove_reminder, clear_reminder }
 )(App);
+
+
+
+
