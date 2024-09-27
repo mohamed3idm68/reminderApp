@@ -11,6 +11,8 @@
     justify-content: center;
     align-items: center;
     z-index: 1000; /* Ensure it appears on top */
+  transition: opacity 0.3s ease;
+
   }
   
   
@@ -23,6 +25,31 @@
     width: 300px; /* Increase width if needed */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
   }
+  
+
+  .close {
+    cursor: pointer; /* Change cursor on hover */
+    font-size: 24px; /* Increase size for better visibility */
+    color: white; /* Change color to stand out */
+    position: absolute; /* Position it in the top right corner */
+    top: 10px;
+    right: 15px;
+  }
+
+  .btn-primary:hover {
+    background-color: #5a5ab4; /* Darken on hover */
+  }
+  
+  .btn-secondary:hover {
+    background-color: #5a5a7e; /* Darken on hover */
+  }
+
+  @media (max-width: 500px) {
+    .modal-content {
+      width: 90%; /* Full width on smaller screens */
+    }
+  }
+  
   
   
    

@@ -18,11 +18,7 @@ function App(props) {
     date: new Date(),
   });
 
-  const [errors, setErrors] = useState({
-    text: "name is requires",
-   
-  });
-
+  const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
   const [timeoutId, setTimeoutId] = useState(null);
   const [reminderMessage, setReminderMessage] = useState("");
@@ -40,13 +36,12 @@ function App(props) {
       isValid = false;
     }
 
-    if (date === "") {
-      newErrors.date = "Date is required";
+    if (date <= mainDate) {
+      newErrors.date = "Date must be in the future";
       isValid = false;
     }
 
-    setErrors(newErrors); // Set errors object directly
-
+    setErrors(newErrors);
     return isValid;
   };
 
@@ -70,9 +65,6 @@ function App(props) {
     });
   };
 
- 
-
-
   const handleSetReminder = () => {
     const now = new Date();
     const reminderDate = new Date(values.date);
@@ -81,25 +73,17 @@ function App(props) {
       const timeout = reminderDate - now;
       setMessage(`Reminder set for ${reminderDate.toLocaleString()}`);
 
-      console.log("Setting reminder for:", reminderDate);
-
-
-      // Clear any existing timeout
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
 
-      // Set a new timeout
       const id = setTimeout(() => {
         playSound();
         setMessage("Reminder: Time to take action!");
-        setReminderMessage("It is time");
+        // setReminderMessage("It is time");
         setShowWindow(true);
-        console.log("showWindow after set:", showWindow); // This will log the previous state
+        console.log("right")
       }, timeout);
-      
-    
-      
 
       setTimeoutId(id);
     } else {
@@ -107,13 +91,11 @@ function App(props) {
     }
   };
 
-  // Function to play the reminder sound
   const playSound = () => {
     const audio = new Audio(sounds);
     audio.play();
   };
 
-  // Clean up the timeout when the component unmounts
   useEffect(() => {
     return () => {
       if (timeoutId) {
@@ -124,12 +106,12 @@ function App(props) {
 
   const handleSnooze = () => {
     setShowWindow(false);
-    // Implement your snooze logic here (e.g., extend the reminder time)
+    // Implement snooze logic here
   };
 
   const handleComplete = () => {
     setShowWindow(false);
-    // Implement your complete logic here (e.g., mark the reminder as done)
+    // Implement complete logic here
   };
 
   const renderErrors = () => {
@@ -173,28 +155,27 @@ function App(props) {
       {renderErrors()}
       {showWindow && (
         <ReminderModal 
-          message={reminderMessage}
+          // message={reminderMessage}
           onSnooze={handleSnooze}
           onComplete={handleComplete}
-          onClose={ () => setShowWindow(false)}
-        
+          onClose={() => setShowWindow(false)}
         />
       )}
       <div className="reminder-title">
-        <h1>What Should you DO?</h1>
+        <h1>What Should You Do?</h1>
       </div>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
           name="text"
-          placeholder="Enter what do you think"
+          placeholder="Enter what you think"
           maxLength="20"
           className="form-control"
           value={values.text}
           onChange={handleChange}
           required
         />
-        {errors.text && <p style={{color:"red"}}>{errors.text}</p>}
+        {errors && <h3>{errors.text}</h3>}
         <DatePicker
           className="form-control"
           placeholderText="Select time"
@@ -207,7 +188,7 @@ function App(props) {
           timeCaption="Time"
           minDate={mainDate}
         />
-        {message && <div className="alert alert-info mt-3">{message}</div>}
+        {/* {message && <div className="alert alert-info mt-3">{message}</div>} */}
         <button className="btn btn-primary btn-block" type="submit">
           Add Reminder
         </button>
@@ -216,7 +197,7 @@ function App(props) {
           className="btn btn-danger btn-block"
           onClick={() => props.clear_reminder()}
         >
-          Clear Reminder
+          Clear Reminders
         </button>
       </form>
     </div>
