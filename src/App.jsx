@@ -175,7 +175,7 @@ function App(props) {
           onChange={handleChange}
           required
         />
-        {errors && <h3>{errors.text}</h3>}
+        {errors && <h6 style={{color:"red"}}>{errors.text}</h6>}
         <DatePicker
           className="form-control"
           placeholderText="Select time"
