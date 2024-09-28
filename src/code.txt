@@ -1,7 +1,6 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import "./App.css";
 import { connect } from "react-redux";
-
 import {
   add_reminder,
   clear_reminder,
@@ -10,172 +9,214 @@ import {
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-// import ClosedDatePicker from "./closeDays/CloseDate";
+import sounds from "../public/sounds/alarmSound.mp3";
+import ReminderModal from "./components/ReminderModal";
 
-function App (props) {
-  
+function App(props) {
+  const [values, setValues] = useState({
+    text: "",
+    date: new Date(),
+  });
 
-  // const [values , setValues] = useState({
-  //   text:"",
-  //   date: new Date()
-  // })
-
-  const [errors , setErrors] = useState({
-    taxt:"",
-    date: new Date()
-  })
-
-  const fieldText = useRef();
-  const fielddate = useRef();
+  const [errors, setErrors] = useState({});
+  const [message, setMessage] = useState("");
+  const [timeoutId, setTimeoutId] = useState(null);
+  const [showWindow, setShowWindow] = useState(false);
+  const [timeOut, setTimeOut] = useState(false);
 
   const mainDate = new Date();
 
-  const validatForm = () => {
-
-    const fieldValue = fieldText.current.value;
-    const dateValue = fielddate.current.value;
-
-    let newerrors = [];
+  const validateForm = () => {
+    const { text, date } = values;
+    let newErrors = {};
     let isValid = true;
 
-    if (fieldValue.trim() === "") {
-      setErrors(newerrors.push("name is required"))
-
+    if (text.trim() === "") {
+      newErrors.text = "Name is required";
       isValid = false;
     }
 
-    if (dateValue.trim() === "") {
-      setErrors(newerrors.push("date is required"))
-
+    if (date <= mainDate) {
+      newErrors.date = "Date must be in the future";
       isValid = false;
     }
 
+    setErrors(newErrors);
     return isValid;
   };
 
-
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (validateForm()) {
+      props.add_reminder(values.text, values.date);
+      setValues({ text: "", date: new Date() });
+      handleSetReminder();
+    }
+  };
 
-    validatForm()
+  const handleDateChange = (date) => {
+    setValues({ ...values, date });
+  };
 
+  const handleChange = (e) => {
+    setValues({
+      ...values,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  }
+  const handleSetReminder = () => {
+    const now = new Date();
+    const reminderDate = new Date(values.date);
 
-  // const handleChange = (e) => {
-  //   const newObj = {...values , [e.target.name]: e.target.value}
-  //   setValues(newObj)
-  //   console.log(newObj)
-  // };
+    if (reminderDate > now) {
+      const timeout = reminderDate - now;
+      setMessage(`Reminder set for ${reminderDate.toLocaleString()}`);
 
-  const rendeRreminder = () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+
+      const id = setTimeout(() => {
+        setTimeOut(true);
+      }, timeout);
+
+      setTimeoutId(id);
+    } else {
+      setMessage("Please set a future time.");
+    }
+  };
+
+  const playSound = () => {
+    const audio = new Audio(sounds);
+    audio.play();
+  };
+
+  useEffect(() => {
+    if (timeOut) {
+      playSound();
+      setMessage("Reminder: Time to take action!");
+      setShowWindow(true); // Show the modal when timeout occurs
+      console.log("occured")
+    }
+  }, [timeOut]);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [timeoutId]);
+
+  const handleSnooze = () => {
+    setShowWindow(false);
+    setTimeOut(false);
+    // Implement snooze logic here
+  };
+
+  const handleComplete = () => {
+    setShowWindow(false);
+    setTimeOut(false);
+    // Implement complete logic here
+  };
+
+  const renderErrors = () => {
+    return Object.keys(errors).length > 0 ? (
+      <div className="alert alert-danger">
+        <strong>Error</strong>
+        <ul>
+          {Object.values(errors).map((error, index) => (
+            <li key={index}>{error}</li>
+          ))}
+        </ul>
+      </div>
+    ) : null;
+  };
+
+  const renderReminder = () => {
     const { reminders } = props;
 
     return (
       <ul className="list-group">
-        {reminders.map((reminder) => {
-          return (
-            <>
-              <li key={reminder.id} className="list-group-item">
-                <div className="text">{reminder.text}</div>
-                <div className="date">
-                  {moment(new Date(reminder.date)).fromNow()}
-                </div>
-                <div
-                  className="remove btn btn-danger"
-                  onClick={() => props.remove_reminder(reminder.id)}
-                >
-                  X
-                </div>
-              </li>
-            </>
-          );
-        })}
+        {reminders.map((reminder) => (
+          <li key={reminder.id} className="list-group-item">
+            <div className="text">{reminder.text}</div>
+            <div className="date">
+              {moment(new Date(reminder.date)).fromNow()}
+            </div>
+            <div
+              className="remove btn btn-danger"
+              onClick={() => props.remove_reminder(reminder.id)}
+            >
+              X
+            </div>
+          </li>
+        ))}
       </ul>
     );
   };
-    
-    return (
-      <>
-      {errors.map((error) => {
-          <div className="alert alert-danger">
-             <strong>error</strong>
-             <ul>
-              <li>{error}</li>
-             </ul>
-          </div>
-      })}
-        <div className="App">
-          <div className="reminder-title">
-            <h1>What Should you DO ?</h1>
-          </div>
-          <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="text"
-              placeholder="enter what do you think"
-              max-length="20"
-              className="form-control"
-              // onChange={handleChange}
-              ref={(fieldValue)}
-              value={values.text}
-            />
-            {errors.text && (
-              <span style={{ color: "red" }}>{errors.text}</span>
-            )}
-            <DatePicker
-              className="form-control"
-              placeholderText="selet time"
-              value={values.date}
-              name="date"
-              selected={values.date}
-              // onChange={handleChange}
-              ref={(dateValue)}
-              showTimeSelect
-              timeFormat="HH:mm"
-              dateFormat="MMMM d, yyy h:mm aa"
-              timeCaption="time"
-              minDate={mainDate}
-              
-              
-            />
-            {errors.date && (
-              <span style={{ color: "red" }}>{errors.date}</span>
-            )}
 
-            <button
-              className="btn btn-primary btn-block"
-              type="submit"
-              onClick={(e) => {
-                e.preventDefault;
-                props.add_reminder(values.text, values.date);
-                setValues({ text: "", date: "" });
-              }}
-            >
-              Add Reminder
-            </button>
-            {rendeRreminder()}
-            <button
-              className="btn btn-danger btn-block "
-              onClick={() => props.clear_reminder()}
-            >
-              Clear Reminder
-            </button>
-          </form>
-        </div>
-      </>
-    );
-  }
-
-
+  return (
+    <div className="App">
+      {renderErrors()}
+      {showWindow && (
+        <ReminderModal
+          onSnooze={handleSnooze}
+          onComplete={handleComplete}
+          onClose={() => setShowWindow(false)}
+          message={"time is on"}
+        />
+      )}
+      <div className="reminder-title">
+        <h1>What Should You Do?</h1>
+      </div>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="text"
+          placeholder="Enter what you think"
+          maxLength="20"
+          className="form-control"
+          value={values.text}
+          onChange={handleChange}
+          required
+        />
+        {errors && <h6 style={{ color: "red" }}>{errors.text}</h6>}
+        <DatePicker
+          className="form-control"
+          placeholderText="Select time"
+          selected={values.date}
+          name="date"
+          onChange={handleDateChange}
+          showTimeSelect
+          timeFormat="HH:mm"
+          dateFormat="MMMM d, yyyy h:mm aa"
+          timeCaption="Time"
+          minDate={mainDate}
+        />
+        <button className="btn btn-primary btn-block" type="submit">
+          Add Reminder
+        </button>
+        {renderReminder()}
+        <button
+          className="btn btn-danger btn-block"
+          onClick={() => props.clear_reminder()}
+        >
+          Clear Reminders
+        </button>
+      </form>
+    </div>
+  );
+}
 
 export default connect(
-  (state) => {
-    return {
-      reminders: state,
-    };
-  },
+  (state) => ({
+    reminders: state,
+  }),
   { add_reminder, remove_reminder, clear_reminder }
 )(App);
+
+
+
+

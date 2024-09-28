@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import { connect } from "react-redux";
 import {
@@ -10,7 +10,8 @@ import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import sounds from "../public/sounds/alarmSound.mp3";
-import ReminderModal from "./components/ReminderModal";
+// import ReminderModal from "./components/ReminderModal";
+import "./components/App.css";
 
 function App(props) {
   const [values, setValues] = useState({
@@ -22,7 +23,6 @@ function App(props) {
   const [message, setMessage] = useState("");
   const [timeoutId, setTimeoutId] = useState(null);
   const [showWindow, setShowWindow] = useState(false);
-  const [timeOut, setTimeOut] = useState(false);
 
   const mainDate = new Date();
 
@@ -73,13 +73,19 @@ function App(props) {
       const timeout = reminderDate - now;
       setMessage(`Reminder set for ${reminderDate.toLocaleString()}`);
 
+      const id = setTimeout(() => {
+        playSound();
+        setMessage("Time to take action!");
+        setShowWindow(true);
+        // Show the modal when timeout occurs
+        console.log("Modal should show now."); // Debug log
+
+        return () => clearTimeout(id);
+      }, timeout);
+
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
-
-      const id = setTimeout(() => {
-        setTimeOut(true);
-      }, timeout);
 
       setTimeoutId(id);
     } else {
@@ -93,32 +99,29 @@ function App(props) {
   };
 
   useEffect(() => {
-    if (timeOut) {
-      playSound();
-      setMessage("Reminder: Time to take action!");
-      setShowWindow(true); // Show the modal when timeout occurs
-      console.log("occured")
-    }
-  }, [timeOut]);
+    handleSetReminder();
+  }, []);
 
-  useEffect(() => {
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-    };
-  }, [timeoutId]);
+  // useEffect(() => {
+  //   return () => {
+  //     if (timeoutId) {
+  //       clearTimeout(timeoutId);
+  //     }
+  //   };
+  // }, [timeoutId]);
 
   const handleSnooze = () => {
     setShowWindow(false);
-    setTimeOut(false);
     // Implement snooze logic here
   };
 
   const handleComplete = () => {
     setShowWindow(false);
-    setTimeOut(false);
     // Implement complete logic here
+  };
+
+  const handelButtonClick = () => {
+    setShowWindow(true);
   };
 
   const renderErrors = () => {
@@ -161,12 +164,29 @@ function App(props) {
     <div className="App">
       {renderErrors()}
       {showWindow && (
-        <ReminderModal
-          onSnooze={handleSnooze}
-          onComplete={handleComplete}
-          onClose={() => setShowWindow(false)}
-        />
+        // <ReminderModal
+        //   onSnooze={handleSnooze}
+        //   onComplete={handleComplete}
+        //   onClose={() => setShowWindow(false)}
+        //   message={message} // Use dynamic message
+        // />
+
+        <>
+          <div className="div1">
+            <div className="div2">
+              <span className="close">&times;</span>
+              <h2>hello world</h2>
+              <button className="btn btn-primary" onClick={handleSnooze}>
+                Snooze
+              </button>
+              <button className="btn btn-secondary" onClick={handleComplete}>
+                Complete
+              </button>
+            </div>
+          </div>
+        </>
       )}
+
       <div className="reminder-title">
         <h1>What Should You Do?</h1>
       </div>
@@ -181,7 +201,7 @@ function App(props) {
           onChange={handleChange}
           required
         />
-        {errors && <h6 style={{ color: "red" }}>{errors.text}</h6>}
+        {errors.text && <h6 style={{ color: "red" }}>{errors.text}</h6>}
         <DatePicker
           className="form-control"
           placeholderText="Select time"
@@ -205,6 +225,9 @@ function App(props) {
           Clear Reminders
         </button>
       </form>
+      <button className="btn btn-secondary" onClick={handelButtonClick}>
+        show window
+      </button>
     </div>
   );
 }
@@ -215,7 +238,3 @@ export default connect(
   }),
   { add_reminder, remove_reminder, clear_reminder }
 )(App);
-
-
-
-
