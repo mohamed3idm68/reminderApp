@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./App.css";
+import "../src/components/App.css"
 import { connect } from "react-redux";
 import {
   add_reminder,
@@ -10,21 +11,20 @@ import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import sounds from "../public/sounds/alarmSound.mp3";
-// import ReminderModal from "./components/ReminderModal";
-import "./components/App.css";
 
 function App(props) {
   const [values, setValues] = useState({
     text: "",
     date: new Date(),
   });
-
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
   const [timeoutId, setTimeoutId] = useState(null);
   const [showWindow, setShowWindow] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const mainDate = new Date();
+  const audioRef = useRef(new Audio(sounds)); // Create the audio reference
 
   const validateForm = () => {
     const { text, date } = values;
@@ -74,10 +74,9 @@ function App(props) {
       setMessage(`Reminder set for ${reminderDate.toLocaleString()}`);
 
       const id = setTimeout(() => {
-        playSound();
+        playSound();  // Play sound when reminder time hits
         setMessage("Time to take action!");
-        setShowWindow(true);
-        // Show the modal when timeout occurs
+        setShowWindow(true); // Show the modal when timeout occurs
         console.log("Modal should show now."); // Debug log
 
         return () => clearTimeout(id);
@@ -94,34 +93,30 @@ function App(props) {
   };
 
   const playSound = () => {
-    const audio = new Audio(sounds);
-    audio.play();
+    if (!isPlaying) {
+      audioRef.current.play();
+      setIsPlaying(true); // Update state to reflect that the audio is playing
+    }
   };
 
-  useEffect(() => {
-    handleSetReminder();
-  }, []);
-
-  // useEffect(() => {
-  //   return () => {
-  //     if (timeoutId) {
-  //       clearTimeout(timeoutId);
-  //     }
-  //   };
-  // }, [timeoutId]);
-
   const handleSnooze = () => {
-    setShowWindow(false);
-    // Implement snooze logic here
+    if (isPlaying) {
+      audioRef.current.pause(); // Pause the audio
+      audioRef.current.currentTime = 0; // Reset the audio to start position
+      setIsPlaying(false); // Update state to reflect that audio has stopped
+    }
+    setShowWindow(false); // Close the window after snooze
+    // Implement snooze logic here (you can set another timeout if required)
   };
 
   const handleComplete = () => {
-    setShowWindow(false);
+    if (isPlaying) {
+      audioRef.current.pause(); // Pause the audio
+      audioRef.current.currentTime = 0; // Reset the audio to start position
+      setIsPlaying(false); // Update state to reflect that audio has stopped
+    }
+    setShowWindow(false); // Close the window after complete
     // Implement complete logic here
-  };
-
-  const handelButtonClick = () => {
-    setShowWindow(true);
   };
 
   const renderErrors = () => {
@@ -164,27 +159,18 @@ function App(props) {
     <div className="App">
       {renderErrors()}
       {showWindow && (
-        // <ReminderModal
-        //   onSnooze={handleSnooze}
-        //   onComplete={handleComplete}
-        //   onClose={() => setShowWindow(false)}
-        //   message={message} // Use dynamic message
-        // />
-
-        <>
-          <div className="div1">
-            <div className="div2">
-              <span className="close">&times;</span>
-              <h2>hello world</h2>
-              <button className="btn btn-primary" onClick={handleSnooze}>
-                Snooze
-              </button>
-              <button className="btn btn-secondary" onClick={handleComplete}>
-                Complete
-              </button>
-            </div>
+        <div className="div1">
+          <div className="div2">
+            <span className="close" onClick={() => setShowWindow(false)}>&times;</span>
+            <h2>It is time now!</h2>
+            <button className="btn btn-primary" onClick={handleSnooze}>
+              Snooze
+            </button>
+            <button className="btn btn-secondary" onClick={handleComplete}>
+              Complete
+            </button>
           </div>
-        </>
+        </div>
       )}
 
       <div className="reminder-title">
@@ -214,6 +200,7 @@ function App(props) {
           timeCaption="Time"
           minDate={mainDate}
         />
+        {message}
         <button className="btn btn-primary btn-block" type="submit">
           Add Reminder
         </button>
@@ -225,9 +212,6 @@ function App(props) {
           Clear Reminders
         </button>
       </form>
-      <button className="btn btn-secondary" onClick={handelButtonClick}>
-        show window
-      </button>
     </div>
   );
 }
