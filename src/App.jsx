@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import "./App.css";
-import "../src/components/App.css"
+import "../src/components/App.css";
 import { connect } from "react-redux";
 import {
   add_reminder,
@@ -74,7 +74,7 @@ function App(props) {
       setMessage(`Reminder set for ${reminderDate.toLocaleString()}`);
 
       const id = setTimeout(() => {
-        playSound();  // Play sound when reminder time hits
+        playSound(); // Play sound when reminder time hits
         setMessage("Time to take action!");
         setShowWindow(true); // Show the modal when timeout occurs
         console.log("Modal should show now."); // Debug log
@@ -105,6 +105,7 @@ function App(props) {
       audioRef.current.currentTime = 0; // Reset the audio to start position
       setIsPlaying(false); // Update state to reflect that audio has stopped
     }
+
     setShowWindow(false); // Close the window after snooze
     // Implement snooze logic here (you can set another timeout if required)
   };
@@ -161,14 +162,18 @@ function App(props) {
       {showWindow && (
         <div className="div1">
           <div className="div2">
-            <span className="close" onClick={() => setShowWindow(false)}>&times;</span>
+            <span className="close" onClick={() => setShowWindow(false)}>
+              &times;
+            </span>
             <h2>It is time now!</h2>
-            <button className="btn btn-primary" onClick={handleSnooze}>
-              Snooze
-            </button>
-            <button className="btn btn-secondary" onClick={handleComplete}>
-              Complete
-            </button>
+            <div className="content-btn">
+              <button className="btn btn-primary" onClick={handleSnooze}>
+                Snooze
+              </button>
+              <button className="btn btn-secondary" onClick={handleComplete}>
+                Complete
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -212,6 +217,7 @@ function App(props) {
           Clear Reminders
         </button>
       </form>
+      {/* <button onClick={setShowWindow(true)}>click to show</button> */}
     </div>
   );
 }
