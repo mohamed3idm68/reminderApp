@@ -17,13 +17,14 @@
 }
 
 .div2{
-  display: flex;
+    display: flex;
     flex-direction: column;
-    background: #7e7ec9;
+    background: #a1a1bd;
     border-radius: 5px; /* Optional: Rounded corners */
     padding: 20px; /* Add some padding */
     width: 300px; /* Increase width if needed */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+    padding:10px;
 
 
 }
@@ -73,6 +74,20 @@
   
   .btn-secondary:hover {
     background-color: #5a5a7e; /* Darken on hover */
+  }
+
+  button.btn.btn-primary {
+    margin-bottom: 8px;
+  }
+
+  .content-btn {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .content-btn button {
+    margin-left:5px;
   }
 
   @media (max-width: 500px) {

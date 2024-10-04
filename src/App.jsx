@@ -113,6 +113,7 @@ function App(props) {
       audioRef.current.currentTime = 0; // Reset the audio to start position
       // Update state to reflect that audio has stopped
     }
+
     setShowWindow(false); // Close the window after snooze
     // Implement snooze logic here (you can set another timeout if required)
   };
@@ -173,12 +174,14 @@ function App(props) {
               &times;
             </span>
             <h2>It is time now!</h2>
-            <button className="btn btn-primary" onClick={handleSnooze}>
-              Snooze
-            </button>
-            <button className="btn btn-secondary" onClick={handleComplete}>
-              Complete
-            </button>
+            <div className="content-btn">
+              <button className="btn btn-primary" onClick={handleSnooze}>
+                Snooze
+              </button>
+              <button className="btn btn-secondary" onClick={handleComplete}>
+                Complete
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -222,6 +225,7 @@ function App(props) {
           Clear Reminders
         </button>
       </form>
+      {/* <button onClick={setShowWindow(true)}>click to show</button> */}
     </div>
   );
 }
