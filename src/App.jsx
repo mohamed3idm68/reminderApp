@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import "./App.css";
-import "../src/components/App.css"
+import "../src/components/App.css";
 import { connect } from "react-redux";
 import {
   add_reminder,
@@ -74,7 +74,7 @@ function App(props) {
       setMessage(`Reminder set for ${reminderDate.toLocaleString()}`);
 
       const id = setTimeout(() => {
-        playSound();  // Play sound when reminder time hits
+        playSound(); // Play sound when reminder time hits
         setMessage("Time to take action!");
         setShowWindow(true); // Show the modal when timeout occurs
         console.log("Modal should show now."); // Debug log
@@ -101,9 +101,17 @@ function App(props) {
 
   const handleSnooze = () => {
     if (isPlaying) {
-      audioRef.current.pause(); // Pause the audio
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setIsPlaying(false)
+      setTimeout(() => {
+        setShowWindow(true)
+        audioRef.current.play();
+        setIsPlaying(true);
+      }, 5000);
+      // Pause the audio
       audioRef.current.currentTime = 0; // Reset the audio to start position
-      setIsPlaying(false); // Update state to reflect that audio has stopped
+      // Update state to reflect that audio has stopped
     }
     setShowWindow(false); // Close the window after snooze
     // Implement snooze logic here (you can set another timeout if required)
@@ -161,7 +169,9 @@ function App(props) {
       {showWindow && (
         <div className="div1">
           <div className="div2">
-            <span className="close" onClick={() => setShowWindow(false)}>&times;</span>
+            <span className="close" onClick={() => setShowWindow(false)}>
+              &times;
+            </span>
             <h2>It is time now!</h2>
             <button className="btn btn-primary" onClick={handleSnooze}>
               Snooze
