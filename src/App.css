@@ -94,7 +94,15 @@ button.btn.btn-primary.btn-block {
 
 /* showWindow css */
 
+/* completeMsg */
 
-
+.completeMessage {
+  background-color: #7e7ec9;
+  width:fit-content;
+  color:red;
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 10px;
+}
 
 

@@ -22,6 +22,7 @@ function App(props) {
   const [timeoutId, setTimeoutId] = useState(null);
   const [showWindow, setShowWindow] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [complete , setComplete] = useState("");
 
   const mainDate = new Date();
   const audioRef = useRef(new Audio(sounds)); // Create the audio reference
@@ -123,7 +124,12 @@ function App(props) {
       audioRef.current.pause(); // Pause the audio
       audioRef.current.currentTime = 0; // Reset the audio to start position
       setIsPlaying(false); // Update state to reflect that audio has stopped
+      
+       
+      
     }
+    
+    setComplete("task completed successfully")
     setShowWindow(false); // Close the window after complete
     // Implement complete logic here
   };
@@ -152,6 +158,7 @@ function App(props) {
             <div className="date">
               {moment(new Date(reminder.date)).fromNow()}
             </div>
+            <div className="completeMessage">{complete}</div>
             <div
               className="remove btn btn-danger"
               onClick={() => props.remove_reminder(reminder.id)}
