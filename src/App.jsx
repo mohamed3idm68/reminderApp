@@ -22,7 +22,7 @@ function App(props) {
   const [timeoutId, setTimeoutId] = useState(null);
   const [showWindow, setShowWindow] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [complete , setComplete] = useState("");
+  const [complete, setComplete] = useState(false);
 
   const mainDate = new Date();
   const audioRef = useRef(new Audio(sounds)); // Create the audio reference
@@ -78,7 +78,16 @@ function App(props) {
         playSound(); // Play sound when reminder time hits
         setMessage("Time to take action!");
         setShowWindow(true); // Show the modal when timeout occurs
-        console.log("Modal should show now."); // Debug log
+
+        if(timeout){
+          setComplete(true);
+          setMessage("task completed successfully")
+        
+        } else {
+          setComplete(false)
+        }
+        
+        
 
         return () => clearTimeout(id);
       }, timeout);
@@ -104,9 +113,9 @@ function App(props) {
     if (isPlaying) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
-      setIsPlaying(false)
+      setIsPlaying(false);
       setTimeout(() => {
-        setShowWindow(true)
+        setShowWindow(true);
         audioRef.current.play();
         setIsPlaying(true);
       }, 5000);
@@ -125,13 +134,14 @@ function App(props) {
       audioRef.current.currentTime = 0; // Reset the audio to start position
       setIsPlaying(false); // Update state to reflect that audio has stopped
       
+
        
       
     }
+   
+      setShowWindow(false); // Close the window after complete
+      // Implement complete logic here
     
-    setComplete("task completed successfully")
-    setShowWindow(false); // Close the window after complete
-    // Implement complete logic here
   };
 
   const renderErrors = () => {
@@ -154,11 +164,11 @@ function App(props) {
       <ul className="list-group">
         {reminders.map((reminder) => (
           <li key={reminder.id} className="list-group-item">
-            <div className="text">{reminder.text}</div>
+            <div className="text"><h4>{reminder.text}</h4></div>
             <div className="date">
               {moment(new Date(reminder.date)).fromNow()}
             </div>
-            <div className="completeMessage">{complete}</div>
+             <div>{message}</div>
             <div
               className="remove btn btn-danger"
               onClick={() => props.remove_reminder(reminder.id)}
@@ -201,7 +211,7 @@ function App(props) {
           type="text"
           name="text"
           placeholder="Enter what you think"
-          maxLength="20"
+          maxLength="200"
           className="form-control"
           value={values.text}
           onChange={handleChange}
